@@ -13,11 +13,16 @@ To run this project must have python installed on your local machine and follow 
 ```
 git clone https://github.com/sajidmahmud69/Visualizing-Algorithm.git
 ```
+* Navigate to the directory
+```
+cd Visualizing-Algorithm\AStarAlgorithm
+```
 * Make a python virtual environment 
 ```
 python -m venv pygame
 ```
 * Activate the virtual environment
+  
   For Mac OS
 ```
 source pygame/bin/activate
