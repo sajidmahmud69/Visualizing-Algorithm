@@ -9,15 +9,15 @@ To clear the screen for a new path press c
 
 ## Setup
 To run this project must have python installed on your local machine and follow the steps below:
-*Clone the repo
+* Clone the repo
 ```
 git clone https://github.com/sajidmahmud69/Visualizing-Algorithm.git
 ```
-*Make a python virtual environment 
+* Make a python virtual environment 
 ```
 python -m venv pygame
 ```
-*Activate the virtual environment
+* Activate the virtual environment
   For Mac OS
 ```
 source pygame/bin/activate
@@ -27,11 +27,11 @@ source pygame/bin/activate
  cd pygame
  cd Scripts\activate
  ```
- *Install necessary libraries
+ * Install necessary libraries
  ```
  pip install pygame
  ```
- *Run the program
+ * Run the program
  ```
  python aStar.py
  ```
