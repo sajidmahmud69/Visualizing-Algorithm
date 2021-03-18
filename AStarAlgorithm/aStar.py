@@ -61,7 +61,7 @@ class Cell:
         return self.color == ORANGE
 
     def is_end (self):
-        # end node is purple color
+        # end node is TURQUOISE color
         return self.color == TURQUOISE
 
     def reset (self):
@@ -87,7 +87,7 @@ class Cell:
         self.color = TURQUOISE
 
     def make_path (self):
-        self.color = PURPLE
+        self.color = BLUE
 
     def draw (self, win):
         pygame.draw.rect (win, self.color, (self.x, self.y, self.width, self.width))
@@ -136,8 +136,69 @@ def h(p1, p2):
 
 
 
-def algorithm (draw, grid, start, end):
-    pass
+def reconstruct_path (came_from, current, draw):
+    # draw the final path with BLUE color
+    while current in came_from:
+        current = came_from[current]
+        current.make_path()
+        draw()
+
+
+
+def a_star_algorithm (draw, grid, start, end):
+    count = 0
+    open_set = PriorityQueue ()
+    
+    open_set.put ((0, count, start))        # add the first node with its fscore in Priority Queue
+    came_from  = {}                         # what node did this node came from
+
+    g_score = {cell: float ("inf") for row in grid for cell in row}
+    g_score[start] = 0                      # g score of start node is Zero
+    
+    f_score = {cell: float ("inf") for row in grid for cell in row}
+    f_score[start] = h(start.get_pos(), end.get_pos())
+    
+    open_set_hash = {start}
+
+    while not open_set.empty():
+
+        # exit the game if someone presses X or quit
+        # we need this because outside the game loop this algorithm has its own loop
+        for event in pygame.event.get ():
+            if event.type == pygame.QUIT:
+                pygame.quit ()
+
+        current  = open_set.get ()[2]               # 2 index stores the node from open set priority queue
+        open_set_hash.remove (current)
+
+        # if current == end we found the shortest path
+        if current == end:
+            # draw the shortest path
+            reconstruct_path (came_from, end, draw)
+            end.make_end ()
+            start.make_start()
+            return True
+
+        for neighbor in current.neighbors:
+            temp_g_score = g_score[current] + 1
+
+            if temp_g_score < g_score[neighbor]:
+                came_from[neighbor] = current
+                g_score[neighbor] = temp_g_score
+                f_score[neighbor] = temp_g_score + h (neighbor.get_pos(), end.get_pos())
+
+                if neighbor not in open_set_hash:
+                    count += 1
+                    open_set.put ((f_score[neighbor], count, neighbor))
+                    open_set_hash.add (neighbor)
+                    neighbor.make_open()
+        draw ()
+
+        if current != start:
+            current.make_closed()
+
+    return False
+
 
 
 
@@ -211,7 +272,6 @@ def main(win, width):
     end  = None                     # end cell
 
     run = True                      # run the main game loop
-    started = False                 # run the algorithm loop
 
     while run:
         draw (win, grid, ROWS, width)
@@ -220,8 +280,6 @@ def main(win, width):
                 run = False
             # once the algorithm starts the user can't change anything and 
             # will only be able to quit the game
-            if started:                                
-                continue
 
             if pygame.mouse.get_pressed ()[0]:
                 # 0 is left mouse button
@@ -258,18 +316,24 @@ def main(win, width):
 
             
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and not started:
+                if event.key == pygame.K_SPACE and start and end:
                     for row in grid:
                         for cell in row:
-                            cell.update_neighbors()
+                            cell.update_neighbors(grid)
 
-                    algorithm (lambda: draw (win, grid, ROWS, width), grid, start, end)
+                    a_star_algorithm (lambda: draw (win, grid, ROWS, width), grid, start, end)
 
+                # if we want to run the game more than once
+                if event.key == pygame.K_c:
+                    # clear the screen and reset everything
+                    start = None
+                    end = None
+                    grid = make_grid(ROWS, WIDTH)
 
     
         # Flip the display
         pygame.display.flip()
-        clock.tick (24)
+        clock.tick (0)
 
     pygame.quit()
 
@@ -277,4 +341,3 @@ def main(win, width):
 
 if __name__ == '__main__':
     main(WIN, WIDTH)
-
