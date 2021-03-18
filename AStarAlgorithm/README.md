@@ -36,4 +36,4 @@ source pygame/bin/activate
  python aStar.py
  ```
  ## Demo
- ![](AStarAlgorithm-gif.mov)
+ ![](AStarAlgorithm-gif)
