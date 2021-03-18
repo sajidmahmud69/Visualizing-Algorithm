@@ -24,21 +24,21 @@ python -m venv pygame
 * Activate the virtual environment
   
   For Mac OS
-```
-source pygame/bin/activate
-```
+  ```
+  source pygame/bin/activate
+  ```
   For Windows 
  ```
  cd pygame
  cd Scripts\activate
  ```
- * Install necessary libraries
- ```
- pip install pygame
- ```
- * Run the program
- ```
- python aStar.py
- ```
- ## Demo
- ![](AStarAlgorithm-gif.mov)
+* Install necessary libraries
+```
+pip install pygame
+```
+* Run the program
+```
+python aStar.py
+```
+## Demo
+![](AStarAlgorithm-gif.mov)
